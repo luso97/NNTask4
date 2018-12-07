@@ -62,30 +62,37 @@ b_hid3 = tf.Variable(np.zeros(n_hidden),trainable=True)
 y3=tf.nn.relu(tf.matmul(y2,W_hid3)+b_hid3);
 
 #first resudial layer
+yRes1=tf.nn.relu(y1+y3);
 
 W_hid4 = tf.Variable(rd.randn(n_hidden,n_hidden) / np.sqrt(n_in),trainable=True);
 b_hid4 = tf.Variable(np.zeros(n_hidden),trainable=True)
-y4=tf.nn.relu(tf.matmul(y3,W_hid4)+b_hid4);
+y4=tf.nn.relu(tf.matmul(yRes1,W_hid4)+b_hid4);
 
 W_hid5 = tf.Variable(rd.randn(n_hidden,n_hidden) / np.sqrt(n_in),trainable=True);
 b_hid5 = tf.Variable(np.zeros(n_hidden),trainable=True)
 y5=tf.nn.relu(tf.matmul(y4,W_hid5)+b_hid5);
 
+yRes2=tf.nn.relu(yRes1+y5);
+
 W_hid6 = tf.Variable(rd.randn(n_hidden,n_hidden) / np.sqrt(n_in),trainable=True);
 b_hid6 = tf.Variable(np.zeros(n_hidden),trainable=True)
-y6=tf.nn.relu(tf.matmul(y5,W_hid6)+b_hid6);
+y6=tf.nn.relu(tf.matmul(yRes2,W_hid6)+b_hid6);
 
 W_hid7 = tf.Variable(rd.randn(n_hidden,n_hidden) / np.sqrt(n_in),trainable=True);
 b_hid7 = tf.Variable(np.zeros(n_hidden),trainable=True)
 y7=tf.nn.relu(tf.matmul(y6,W_hid7)+b_hid7);
 
+yRes3=tf.nn.relu(yRes2+y7);
+
 W_hid8 = tf.Variable(rd.randn(n_hidden,n_hidden) / np.sqrt(n_in),trainable=True);
 b_hid8 = tf.Variable(np.zeros(n_hidden),trainable=True)
-y8=tf.nn.relu(tf.matmul(y7,W_hid8)+b_hid8);
+y8=tf.nn.relu(tf.matmul(yRes3,W_hid8)+b_hid8);
 
 W_hid9 = tf.Variable(rd.randn(n_hidden,n_hidden) / np.sqrt(n_in),trainable=True);
 b_hid9 = tf.Variable(np.zeros(n_hidden),trainable=True)
 y9=tf.nn.relu(tf.matmul(y8,W_hid9)+b_hid9);
+
+yRes4=tf.nn.relu(yRes3+y9);
 ####################################### 
 ### For 1 hidden layer, decomment the 1st w_out, for 2 the 2nd and for 3 the 3rd (keep the other commented)
 w_out = tf.Variable(rd.randn(n_hidden,n_out) / np.sqrt(n_in),trainable=True)
@@ -99,7 +106,7 @@ b_out = tf.Variable(np.zeros(n_out),trainable=True)
 ####################################### 
 ### For 1 hidden layer, decomment the 1st y, for 2 the 2nd and for 3 the 3rd (keep the other commented)
 
-y = y9
+y = yRes4
 #y = tf.nn.relu(tf.matmul(tf.nn.relu(tf.matmul(tf.nn.relu(tf.matmul(x,W_hid) + b_hid),W_hid2)+b_hid2),W_hid3)+b_hid3)
 z = tf.nn.softmax(tf.matmul(y,w_out) + b_out)
 
